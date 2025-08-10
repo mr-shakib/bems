@@ -1,9 +1,23 @@
 import { Hono } from 'hono';
 import { handle } from 'hono/vercel';
+import { cors } from 'hono/cors';
 import auth from '@/features/auth/server/route';
 
-
 const app = new Hono().basePath("/api");
+
+app.use('*', cors({
+  origin: (origin) => {
+    // Allow requests from localhost on any port during development
+    if (!origin || origin.startsWith('http://localhost:')) {
+      return origin;
+    }
+    // Add your production domain here when deploying
+    return null;
+  },
+  allowHeaders: ['Content-Type', 'Authorization'],
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+}));
 
 const routes = app
   .route("/auth", auth);

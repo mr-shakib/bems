@@ -1,3 +1,4 @@
+"use client"
 import { email, z } from "zod";
 
 import { FcGoogle } from "react-icons/fc";
@@ -24,12 +25,12 @@ import {
     FormMessage
 } from "@/components/ui/form"
 import { register } from "module";
-import { registerSchema } from "../server/schemas";
+import { registerSchema } from "../schemas";
 import { useRegister } from "../api/use-register";
 
 
 export const SignUpCard = () => {
-    const { mutate } = useRegister();
+    const { mutate, isPending } = useRegister();
     const form = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -120,7 +121,7 @@ export const SignUpCard = () => {
 
                         )}
                         />
-                    <Button disabled={false} size="lg" className="w-full">Login</Button>
+                    <Button disabled={isPending} size="lg" className="w-full">Register</Button>
                 </form>
                 </Form>
 
@@ -130,7 +131,7 @@ export const SignUpCard = () => {
                     
                         <CardContent className="p-7 flex flex-col gap-y-4">
                             <Button variant="secondary"
-                            disabled={false}
+                            disabled={isPending}
                             size="lg"
                             className="w-full"
                             >
@@ -138,12 +139,12 @@ export const SignUpCard = () => {
                                 Login with Google
                             </Button>
                             <Button variant="secondary"
-                            disabled={false}
+                            disabled={isPending}
                             size="lg"
                             className="w-full"
                             >
                                 <FaGithub className="mr-2 size-5"/>
-                                Login with Google
+                                Login with Github
                             </Button>
                         </CardContent>
                     

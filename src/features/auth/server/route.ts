@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { success, z } from "zod";
 import { Hono } from "hono";
-import { loginSchema, registerSchema } from "./schemas";
+import { loginSchema, registerSchema } from "../schemas";
 import { register } from "module";
 import { createAdminClient } from "@/lib/appwrite";
 import { ID } from "node-appwrite";

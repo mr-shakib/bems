@@ -13,7 +13,7 @@ import {
     DropdownMenuItem
 } from "@/components/ui/dropdown-menu";
 
-import { DottedSeparator } from "./dotted-separator"; 
+import { DottedSeparator } from "../../../components/dotted-separator"; 
 
 import { useLogout } from "@/features/auth/api/use-logout";
 import { useCurrent } from "@/features/auth/api/use-current";
