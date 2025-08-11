@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { client } from "@/lib/rpc";
 import { InferRequestType, InferResponseType } from "hono";
@@ -15,11 +16,20 @@ export const useLogin = () => {
   RequestType>({
     mutationFn: async ({ json }) => {
       const response = await client.api.auth.login["$post"]({ json });
+
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
       return await response.json();
     },
     onSuccess: () => {
+      toast.success("Login successful!");
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ["current"] });
+    },
+    onError: () => {
+      toast.error("Login failed!");
     },
   });
 
