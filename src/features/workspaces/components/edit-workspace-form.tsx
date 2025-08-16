@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRef } from "react";
-import { AlertTriangle, ArrowLeftIcon, ImageIcon, Trash } from "lucide-react";
+import { AlertTriangle, ArrowLeftIcon, CopyIcon, ImageIcon, Trash } from "lucide-react";
 import { updateWorkspaceSchema } from "../schemas";
 import { useUpdateWorkspace } from "../api/use-update-workspace";
 import { useDeleteWorkspace } from "../api/use-delete-workspace";
@@ -20,6 +20,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useConfirm } from "@/hooks/use-confirm";
+import { toast } from "sonner";
+import { useResetInviteCode } from "../api/use-reset-invite-code";
 
 interface EditWorkspaceFormProps {
   onCancel?: () => void;
@@ -27,13 +29,23 @@ interface EditWorkspaceFormProps {
 }
 
 export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceFormProps) => {
+    console.log("Initial values in EditWorkspaceForm:", initialValues);
+    console.log("Invite code in EditWorkspaceForm:", initialValues.inviteCode);
+    
     const router = useRouter();
     const { mutate: updateWorkspace, isPending: isUpdatingWorkspace } = useUpdateWorkspace(); 
     const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } = useDeleteWorkspace();
-    
+    const { mutate: resetInviteCode, isPending: isResettingInviteCode } = useResetInviteCode();
+
     const [DeleteDialog, confirmDelete] = useConfirm(
         "Delete Workspace",
         "This action cannot be undone. This will permanently delete the workspace and all of its contents.",
+        "destructive"
+    );
+
+    const [ResetDialog, confirmReset] = useConfirm(
+        "Reset Invite Link",
+        "This action will reset the invite link for the workspace.",
         "destructive"
     );
 
@@ -56,6 +68,19 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
         }, {
             onSuccess: () => {
                 window.location.href = "/";
+            }
+        });
+    };
+
+    const handleResetInviteCode = async () => {
+        const ok = await confirmReset();
+        if (!ok) return;
+        
+        resetInviteCode({
+            param: { workspaceId: initialValues.$id }
+        }, {
+            onSuccess: () => {
+                router.refresh();
             }
         });
     };
@@ -84,11 +109,21 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
         }
     };
 
+    // Change from function to computed value
+    const fullInviteLink = `${window.location.origin}/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
+    console.log("Full invite link:", fullInviteLink);
+
+    const handleCopyInviteLink = () => {
+        navigator.clipboard.writeText(fullInviteLink)
+        .then(() => toast.success("Invite link copied to clipboard"));
+    }
+
     const isPending = isUpdatingWorkspace || isDeletingWorkspace;
 
     return (
         <div className="flex flex-col gap-y-4">
             <DeleteDialog />
+            <ResetDialog />
             <Button 
                 size="sm" 
                 variant="secondary"  
@@ -237,68 +272,125 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
                 </CardContent>
             </Card>
 
-            {/* Danger Zone */}
-<Card className="w-full border-destructive/20 bg-destructive/5">
-    <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10">
-            <AlertTriangle className="h-5 w-5 text-destructive" />
-        </div>
-        <CardTitle className="text-xl font-bold text-destructive">
-            Danger Zone
-        </CardTitle>
-    </CardHeader>
-    <div className="px-7">
-        <DottedSeparator />
-    </div>
-    <CardContent className="p-7">
-        <div className="rounded-lg border border-destructive/20 bg-background p-6">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <div className="flex-1 space-y-2">
-                    <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-foreground">
-                            Delete Workspace
-                        </h3>
-                        <div className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-1 text-xs font-medium text-destructive">
-                            Permanent
+            <Card className="w-full border-primary/20 bg-primary/5">
+                <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
+                    <CardTitle className="text-xl font-bold text-primary">
+                        Invite Members
+                    </CardTitle>
+                </CardHeader>
+                <div className="px-7">
+                    <DottedSeparator />
+                </div>
+                <CardContent className="p-7">
+                    <div className="rounded-lg border border-primary/20 bg-background p-6">
+                        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                            <div className="flex-1 space-y-2">
+                                
+                                <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+                                    Use the link below to invite members to your workspace. <strong>{initialValues.name}</strong>   
+                                </p>
+                                <div className="mt-4">
+                                    <div className="flex items-center gap-x-2">
+                                        <Input 
+                                            disabled
+                                            value={fullInviteLink} 
+                                        />
+                                        <Button 
+                                        variant="secondary"
+                                        className="size-12"
+                                        onClick={handleCopyInviteLink}
+
+                                        >
+                                           <CopyIcon className="size-5"/>
+                                        </Button>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-2 lg:ml-6">
+                                <Button
+                                    size="sm"
+                                    variant="tertiary"
+                                    type="button"
+                                    disabled={isPending || isResettingInviteCode}
+                                    onClick={handleResetInviteCode}
+                                    className="mt-6 w-fit ml-auto"
+                                >
+                                    Reset Invite Link
+                                </Button>
+                                
+                            </div>
+                                
+                            </div>
+                            
+                            
                         </div>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-                        Once you delete this workspace, there is no going back. This will permanently 
-                        delete the <strong>{initialValues.name}</strong> workspace and all of its contents, 
-                        including files, projects, and settings.
-                    </p>
-                    
+                </CardContent>
+            </Card>
+
+            {/* Danger Zone */}
+            <Card className="w-full border-destructive/20 bg-destructive/5">
+                <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10">
+                        <AlertTriangle className="h-5 w-5 text-destructive" />
+                    </div>
+                    <CardTitle className="text-xl font-bold text-destructive">
+                        Danger Zone
+                    </CardTitle>
+                </CardHeader>
+                <div className="px-7">
+                    <DottedSeparator />
                 </div>
-                
-                <div className="flex flex-col gap-2 lg:ml-6">
-                    <Button
-                        size="sm"
-                        variant="destructive"
-                        type="button"
-                        disabled={isPending}
-                        onClick={handleDelete}
-                        className="w-full lg:w-auto min-w-[140px]"
-                    >
-                        {isDeletingWorkspace ? (
-                            <>
-                                <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                Deleting...
-                            </>
-                        ) : (
-                            <>
-                                <Trash className="h-4 w-4 mr-2" />
-                                Delete Workspace
-                            </>
-                        )}
-                    </Button>
-                    <p className="text-xs text-center text-muted-foreground lg:text-right">
-                        This action cannot be undone
-                    </p>
-                </div>
-            </div>
-        </div>
-    </CardContent>
-</Card>
+                <CardContent className="p-7">
+                    <div className="rounded-lg border border-destructive/20 bg-background p-6">
+                        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                            <div className="flex-1 space-y-2">
+                                <div className="flex items-center gap-2">
+                                    <h3 className="font-semibold text-foreground">
+                                        Delete Workspace
+                                    </h3>
+                                    <div className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-1 text-xs font-medium text-destructive">
+                                        Permanent
+                                    </div>
+                                </div>
+                                <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+                                    Once you delete this workspace, there is no going back. This will permanently 
+                                    delete the <strong>{initialValues.name}</strong> workspace and all of its contents, 
+                                    including files, projects, and settings.
+                                </p>
+                                
+                            </div>
+
+                            <DottedSeparator py-7/>
+
+                            <div className="flex flex-col gap-2 lg:ml-6">
+                                <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    type="button"
+                                    disabled={isPending}
+                                    onClick={handleDelete}
+                                    className="w-full lg:w-auto min-w-[140px]"
+                                >
+                                    {isDeletingWorkspace ? (
+                                        <>
+                                            <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                            Deleting...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Trash className="h-4 w-4 mr-2" />
+                                            Delete Workspace
+                                        </>
+                                    )}
+                                </Button>
+                                <p className="text-xs text-center text-muted-foreground lg:text-right">
+                                    This action cannot be undone
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 };

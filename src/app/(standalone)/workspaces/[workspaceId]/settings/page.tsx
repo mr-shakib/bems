@@ -20,6 +20,10 @@ const WorkspaceIdSettingsPage = async ({
         redirect(`/workspaces/${params.workspaceId}`);
     }
 
+    // Debugging: Log the workspace data to see if inviteCode is present
+    console.log("Workspace data:", initialValues);
+    console.log("Invite code:", initialValues.inviteCode);
+
     return (
         <div className="w-full lg:max-w-xl">
             <EditWorkspaceForm initialValues={initialValues} />
