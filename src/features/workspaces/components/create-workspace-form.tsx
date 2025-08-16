@@ -130,16 +130,34 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
                                                 onChange={handleImageChange}
                                                 disabled={isPending}
                                             />
+                                            {field.value ? (
                                             <Button
                                                 type="button"
-                                                variant="tertiary"
-                                                onClick={() => inputRef.current?.click()}
+                                                variant="destructive"
                                                 disabled={isPending}
                                                 size="xs"
                                                 className="w-fit mt-2"
+                                                onClick={() => {
+                                                    field.onChange(null);
+                                                    if (inputRef.current) {
+                                                        inputRef.current.value = "";
+                                                    }
+                                                }}
                                             >
-                                                Upload Image
+                                                Remove Image
                                             </Button>
+                                            ) : (
+                                                <Button
+                                                    type="button"
+                                                    variant="tertiary"
+                                                    onClick={() => inputRef.current?.click()}
+                                                    disabled={isPending}
+                                                    size="xs"
+                                                    className="w-fit mt-2"
+                                                >
+                                                    Upload Image
+                                                </Button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
