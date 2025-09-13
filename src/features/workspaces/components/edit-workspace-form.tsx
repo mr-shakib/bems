@@ -12,7 +12,7 @@ import { useDeleteWorkspace } from "../api/use-delete-workspace";
 import { useRouter } from "next/navigation";
 import { Workspace } from "../types";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback,  } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DottedSeparator } from "@/components/dotted-separator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -78,10 +78,6 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
         
         resetInviteCode({
             param: { workspaceId: initialValues.$id }
-        }, {
-            onSuccess: () => {
-                router.refresh();
-            }
         });
     };
 
@@ -95,10 +91,9 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
             form: finalValues,
             param: { workspaceId: initialValues.$id }
         }, {
-            onSuccess: ({ data }) => {
+            onSuccess: () => {
                 form.reset();
-                router.push(`/workspaces/${data.$id}`);
-            }
+            },
         });
     };
 
