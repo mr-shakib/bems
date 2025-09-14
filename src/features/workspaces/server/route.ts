@@ -1,5 +1,4 @@
 import { zValidator } from "@hono/zod-validator";
-import { create } from "domain";
 import { Hono } from "hono";
 import { createWorkspaceSchema, updateWorkspaceSchema } from "../schemas";
 import { sessionMiddleware } from "@/lib/session-middleware";
@@ -8,7 +7,6 @@ import { ID, Query } from "node-appwrite";
 import { MemberRole } from "@/features/members/types";
 import { generateInviteCode } from "@/lib/utils";
 import { getMember } from "@/features/members/utils";
-import { error } from "console";
 import z from "zod";
 import { Workspace } from "../types";
 
@@ -163,7 +161,6 @@ const app = new Hono()
         sessionMiddleware,
         async (c) => {
             const databases = c.get("databases");
-            const storage = c.get("storage");
             const user = c.get("user");
 
             const { workspaceId } = c.req.param();
@@ -196,7 +193,6 @@ const app = new Hono()
         sessionMiddleware,
         async (c) => {
             const databases = c.get("databases");
-            const storage = c.get("storage");
             const user = c.get("user");
 
             const { workspaceId } = c.req.param();
