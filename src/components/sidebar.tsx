@@ -10,10 +10,7 @@ export const Sidebar = () => {
     return (
         <aside className="h-full bg-neutral-100 p-3 sm:p-4 w-full">
             <Link href="/">
-                <BemsLogo 
-                    size="lg"
-                    className="w-32 sm:w-36 md:w-40"
-                />
+                <BemsLogo size="lg" className="w-32 sm:w-36 md:w-40" />
             </Link>
             <DottedSeparator className="my-3 sm:my-4"/>
             <WorkspaceSwitcher />

@@ -41,7 +41,10 @@ export const UserButton = () => {
     if (isLoading) {
         return (
         <div className="size-10 rounded-full flex items-center justify-center bg-neutral-200 border border-neutral-300">
-            <Loader className="size-4 animate-spin text-muted-foreground" />
+            <div className="relative w-4 h-4">
+                <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
+                <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
             </div>
         );
     }

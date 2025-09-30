@@ -394,7 +394,10 @@ export const ProfileView = ({ user, workspaceId }: ProfileViewProps) => {
                         >
                           {isUploadingImage ? (
                             <>
-                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                              <div className="relative w-4 h-4 mr-2">
+                                <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
+                                <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+                              </div>
                               {isDeletingImage ? "Replacing..." : "Uploading..."}
                             </>
                           ) : (
@@ -415,7 +418,10 @@ export const ProfileView = ({ user, workspaceId }: ProfileViewProps) => {
                           >
                             {isDeletingImage ? (
                               <>
-                                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                <div className="relative w-4 h-4 mr-2">
+                                  <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
+                                  <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+                                </div>
                                 Removing...
                               </>
                             ) : (
@@ -433,7 +439,10 @@ export const ProfileView = ({ user, workspaceId }: ProfileViewProps) => {
                       {isDeletingImage && (
                         <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
                           <p className="text-sm text-orange-700 flex items-center">
-                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                            <div className="relative w-4 h-4 mr-2">
+                              <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
+                              <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
                             Deleting previous image from cloud storage...
                           </p>
                         </div>

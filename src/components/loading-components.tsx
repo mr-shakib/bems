@@ -217,12 +217,108 @@ export const SuccessAnimation: React.FC<SuccessAnimationProps> = ({
             </div>
             <div className="absolute inset-0 border-4 border-green-500 rounded-full animate-ping opacity-20" />
           </div>
-          
+
           <div className="text-center">
             <h3 className="font-semibold text-green-600 mb-1">{message}</h3>
             <p className="text-sm text-gray-600">Changes saved successfully</p>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// Minimal Top Loading Bar for Navigation
+interface TopLoadingBarProps {
+  isVisible: boolean;
+}
+
+export const TopLoadingBar: React.FC<TopLoadingBarProps> = ({
+  isVisible
+}) => {
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed top-0 left-0 right-0 z-50">
+      <div className="h-0.5 bg-slate-200 overflow-hidden">
+        <div 
+          className="h-full bg-slate-600 animate-pulse"
+          style={{
+            width: '30%',
+            animation: 'loading-progress 1.5s ease-in-out infinite'
+          }}
+        />
+      </div>
+      <style jsx>{`
+        @keyframes loading-progress {
+          0% { 
+            transform: translateX(-100%);
+            width: 0%;
+          }
+          50% {
+            width: 70%;
+          }
+          100% { 
+            transform: translateX(100%);
+            width: 100%;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+// Modern Minimal Loading Component
+interface ModernLoadingProps {
+  isVisible: boolean;
+  message?: string;
+}
+
+export const ModernLoading: React.FC<ModernLoadingProps> = ({
+  isVisible,
+  message = "Loading..."
+}) => {
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="flex flex-col items-center space-y-4">
+        {/* Minimal loading spinner */}
+        <div className="relative">
+          <div className="w-8 h-8 border-2 border-slate-200 rounded-full"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        
+        {/* Simple text */}
+        <p className="text-sm text-slate-600 font-medium">{message}</p>
+      </div>
+    </div>
+  );
+};
+
+// Cute Settings Loading Component
+interface SettingsLoadingProps {
+  isVisible: boolean;
+  message?: string;
+}
+
+export const SettingsLoading: React.FC<SettingsLoadingProps> = ({
+  isVisible,
+  message = "Loading..."
+}) => {
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="flex flex-col items-center space-y-4">
+        {/* Minimal loading spinner */}
+        <div className="relative">
+          <div className="w-8 h-8 border-2 border-slate-200 rounded-full"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        
+        {/* Simple text */}
+        <p className="text-sm text-slate-600 font-medium">{message}</p>
       </div>
     </div>
   );

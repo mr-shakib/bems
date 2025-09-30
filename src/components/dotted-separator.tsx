@@ -11,7 +11,7 @@ interface DottedSeparatorProps {
 
 export const DottedSeparator = ({
   className,
-  color = "#d4d4d8",
+  color = "linear-gradient(90deg, #64748b 0%, #94a3b8 50%, #64748b 100%)",
   height = "2px",
   dotSize = "2px",
   gapSize = "6px",
@@ -33,18 +33,43 @@ export const DottedSeparator = ({
       )}
     >
       <div
-        className={isHorizontal ? "flex-grow" : "flex-grow-0"}
+        className={cn(
+          "transition-all duration-300 hover:opacity-80",
+          isHorizontal ? "flex-grow" : "flex-grow-0"
+        )}
         style={{
           width: isHorizontal ? "100%" : height,
           height: isHorizontal ? height : "100%",
-          backgroundImage: `radial-gradient(circle, ${color} 25%, transparent 25%)`,
+          backgroundImage: `radial-gradient(circle, ${color.includes('gradient') ? 'transparent' : color} 25%, transparent 25%)`,
           backgroundSize: isHorizontal
             ? `${dotNum + gapNum}px ${height}`
             : `${height} ${dotNum + gapNum}px`,
           backgroundRepeat: isHorizontal ? "repeat-x" : "repeat-y",
           backgroundPosition: "center",
         }}
-      />
+      >
+        {/* Gradient overlay for modern look */}
+        {color.includes('gradient') && (
+          <div
+            className="w-full h-full opacity-60"
+            style={{
+              background: color,
+              maskImage: `radial-gradient(circle, black 25%, transparent 25%)`,
+              maskSize: isHorizontal
+                ? `${dotNum + gapNum}px ${height}`
+                : `${height} ${dotNum + gapNum}px`,
+              maskRepeat: isHorizontal ? "repeat-x" : "repeat-y",
+              maskPosition: "center",
+              WebkitMaskImage: `radial-gradient(circle, black 25%, transparent 25%)`,
+              WebkitMaskSize: isHorizontal
+                ? `${dotNum + gapNum}px ${height}`
+                : `${height} ${dotNum + gapNum}px`,
+              WebkitMaskRepeat: isHorizontal ? "repeat-x" : "repeat-y",
+              WebkitMaskPosition: "center",
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

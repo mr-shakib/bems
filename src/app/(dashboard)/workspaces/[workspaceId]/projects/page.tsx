@@ -66,7 +66,10 @@ export default function ProjectsPage() {
   if (projectsLoading || tasksLoading) {
     return (
       <div className="h-full flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="relative w-8 h-8">
+          <div className="w-8 h-8 border-2 border-slate-200 rounded-full"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
       </div>
     );
   }

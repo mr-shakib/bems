@@ -18,10 +18,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
         <main className="bg-neutral-100 min-h-screen">
             <div className="mx-auto max-w-screen-2xl p-4 sm:p-6 lg:p-8">
                 <nav className="flex justify-between items-center mb-4 sm:mb-6">
-                    <BemsLogo 
-                        size="lg"
-                        className="w-24 sm:w-32 md:w-38"
-                    />
+                    <BemsLogo size="lg" className="w-24 sm:w-32 md:w-38" />
                     <Button asChild variant="secondary" size="sm" className="h-8 sm:h-9 px-3 sm:px-4 text-sm">
                         <Link href={isSignIn ? "/sign-up" : "/sign-in"}>
                             {isSignIn ? "Sign Up" : "Login"}

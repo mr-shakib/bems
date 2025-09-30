@@ -77,7 +77,10 @@ export const TaskKanbanView = ({
   if (isLoading) {
     return (
       <div className="p-8 text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+        <div className="relative mx-auto w-8 h-8">
+          <div className="w-8 h-8 border-2 border-slate-200 rounded-full"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
         <p className="mt-2 text-muted-foreground">Loading tasks...</p>
       </div>
     );
