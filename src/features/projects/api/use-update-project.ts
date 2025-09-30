@@ -28,7 +28,7 @@ export const useUpdateProject = () => {
       toast.success("Project updated successfully!");
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ["projects"] });
-      queryClient.invalidateQueries({ queryKey: ["projects", data.$id] });
+      queryClient.invalidateQueries({ queryKey: ["projects", data.data.$id] });
 
     },
     onError: (error) => {

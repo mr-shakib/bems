@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { success, z } from "zod";
 import { Hono } from "hono";
-import { loginSchema, registerSchema } from "../schemas";
+import { loginSchema, registerSchema, updateProfileSchema } from "../schemas";
 import { register } from "module";
 import { createAdminClient } from "@/lib/appwrite";
 import { ID } from "node-appwrite";
@@ -80,9 +80,25 @@ async (c) => {
      deleteCookie(c, AUTH_COOKIE);
      await account.deleteSession("current");
 
-
-
      return c.json({ success: true });
-});
+})
+
+.patch("/profile",
+     sessionMiddleware,
+     zValidator("json", updateProfileSchema),
+     async (c) => {
+          const { name, avatar, avatarPublicId } = c.req.valid("json");
+          const account = c.get("account");
+
+          try {
+               const updatedUser = await account.updateName(name);
+               // Note: Appwrite doesn't support custom avatar URLs directly
+               // The avatar and avatarPublicId will be handled client-side for display purposes
+               return c.json({ data: { ...updatedUser, avatar, avatarPublicId } });
+          } catch (error) {
+               return c.json({ error: "Failed to update profile" }, 400);
+          }
+     }
+);
 
 export default app;

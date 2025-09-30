@@ -36,21 +36,20 @@ export const WorkspaceSwitcher = () => {
     return (
         <div className="flex flex-col gap-y-2">
            <div className="flex items-center justify-between">
-            <p className="text-xs uppercase text-neutral-500">Workspaces</p>
-            <RiAddCircleFill onClick={open} className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition" />
+            <p className="text-xs uppercase text-neutral-500 font-medium">Workspaces</p>
+            <RiAddCircleFill onClick={open} className="size-4 sm:size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition" />
            </div>
            <Select onValueChange={onselect} value={selectedWorkspaceId || workspaceId}>
-            <SelectTrigger className="w-full bg-neutral-200 font-medium p-1">
+            <SelectTrigger className="w-full bg-neutral-200 font-medium p-2 sm:p-1 h-9 sm:h-10 text-sm">
              <SelectValue placeholder="Select a workspace" />
             </SelectTrigger>
             <SelectContent>
              {workspaces?.documents.map((workspace) => (
-              <SelectItem key={workspace.$id} value={workspace.$id}>
-                <div className="flex justify-start items-center gap-3 font-medium">
+              <SelectItem key={workspace.$id} value={workspace.$id} className="py-2">
+                <div className="flex justify-start items-center gap-2 sm:gap-3 font-medium">
                   <WorkspaceAvatar image={workspace.imageUrl} name={workspace.name} />
-                  <span className="truncate">{workspace.name}</span>
+                  <span className="truncate text-sm">{workspace.name}</span>
                 </div>
-
               </SelectItem>
              ))}
             </SelectContent>

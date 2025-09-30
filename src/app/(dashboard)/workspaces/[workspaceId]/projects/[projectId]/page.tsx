@@ -2,15 +2,14 @@ import { redirect } from "next/navigation";
 
 import { getCurrent } from "@/features/auth/queries";
 import { getProject } from "@/features/projects/queries";
-import { ProjectAvatar } from "@/features/projects/components/project-avatar";
-import { Button } from "@/components/ui/button";
-import { PencilIcon } from "lucide-react";
-import Link from "next/link";
+import { ProjectTasksView } from "@/features/projects/components/project-tasks-view-new";
 
 interface ProjectIdPageProps{
-    params: {projectId: string};
+    params: {
+        projectId: string;
+        workspaceId: string;
+    };
 }
-
 
 const ProjectIdPage = async ({
     params,
@@ -26,25 +25,11 @@ const ProjectIdPage = async ({
         throw new Error("Project not found or you don't have access to it");
     }
 
-    return(
-        <div className="flex flex-col gap-y-4">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-x-2">
-                    <ProjectAvatar
-                        name={initialValues.name}
-                        image={initialValues.imageUrl}
-                        className="size-8" fallbackClassName=""                      />
-                        <p className="text-lg font-semibold">{initialValues.name}</p>
-
-                </div>
-                <Button variant="secondary" size="sm" asChild>
-                    <Link href={`/workspaces/${initialValues.workspaceId}/projects/${initialValues.$id}/settings`}>
-                        <PencilIcon className="size-4 mr-2"/>
-                        Edit Project
-                    </Link>
-                </Button>
-            </div>
-        </div>
+    return (
+        <ProjectTasksView 
+            project={initialValues}
+            workspaceId={params.workspaceId}
+        />
     );
 };
 

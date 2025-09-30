@@ -11,3 +11,9 @@ export const registerSchema = z.object({
     password: z.string().min(8, "Password must contain minimum of 8 characters"),
 });
 
+export const updateProfileSchema = z.object({
+    name: z.string().trim().min(1, "Name is required"),
+    avatar: z.string().url().optional(),
+    avatarPublicId: z.string().optional(),
+});
+
