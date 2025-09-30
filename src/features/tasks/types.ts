@@ -1,6 +1,7 @@
 import { Models } from "node-appwrite";
 
 export enum TaskStatus {
+  BACKLOG = "BACKLOG",
   TODO = "TODO",
   IN_PROGRESS = "IN_PROGRESS",
   IN_REVIEW = "IN_REVIEW", 
@@ -25,18 +26,17 @@ export type Task = Models.Document & {
   name: string;
   description?: string;
   status: TaskStatus;
-  priority?: TaskPriority; // Made optional since database doesn't support it yet
-  type?: TaskType; // Made optional since database doesn't support it yet
+  priority?: TaskPriority;
+  type?: TaskType;
   assigneeId: string;
   projectId: string;
   workspaceId: string;
-  dueDate?: string; // Keep optional for UI, handle in server
+  dueDate?: string;
   position: number;
-  createdBy?: string; // Made optional since database doesn't support it yet
+  createdBy?: string;
   labels?: string[];
   estimatedHours?: number;
   loggedHours?: number;
-  // Populated by server
   assignee?: {
     $id: string;
     name: string;
@@ -44,11 +44,22 @@ export type Task = Models.Document & {
   } | null;
 };
 
+// Card border colors for different statuses
 export const TASK_STATUS_COLORS = {
-  [TaskStatus.TODO]: "bg-gray-500",
-  [TaskStatus.IN_PROGRESS]: "bg-blue-500", 
-  [TaskStatus.IN_REVIEW]: "bg-yellow-500",
-  [TaskStatus.DONE]: "bg-green-500"
+  [TaskStatus.BACKLOG]: "border-l-red-400",
+  [TaskStatus.TODO]: "border-l-slate-500", 
+  [TaskStatus.IN_PROGRESS]: "border-l-blue-500",
+  [TaskStatus.IN_REVIEW]: "border-l-yellow-500",
+  [TaskStatus.DONE]: "border-l-green-500"
+} as const;
+
+// Badge colors for status indicators
+export const TASK_STATUS_BADGE_COLORS = {
+  [TaskStatus.BACKLOG]: "bg-gray-100 text-red-700",
+  [TaskStatus.TODO]: "bg-slate-100 text-slate-700",
+  [TaskStatus.IN_PROGRESS]: "bg-blue-100 text-blue-700", 
+  [TaskStatus.IN_REVIEW]: "bg-yellow-100 text-yellow-700",
+  [TaskStatus.DONE]: "bg-green-100 text-green-700"
 } as const;
 
 export const TASK_PRIORITY_COLORS = {
@@ -66,6 +77,7 @@ export const TASK_TYPE_COLORS = {
 } as const;
 
 export const TASK_STATUS_LABELS = {
+  [TaskStatus.BACKLOG]: "Backlog",
   [TaskStatus.TODO]: "To Do",
   [TaskStatus.IN_PROGRESS]: "In Progress",
   [TaskStatus.IN_REVIEW]: "In Review",

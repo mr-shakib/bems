@@ -3,9 +3,10 @@
 import React from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { Task, TaskStatus, TASK_STATUS_COLORS } from "../types";
+import { Task, TaskStatus, TASK_STATUS_COLORS, TASK_STATUS_BADGE_COLORS, TASK_STATUS_LABELS } from "../types";
 import { KanbanTaskCard } from "./kanban-task-card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface KanbanColumnProps {
   status: TaskStatus;
@@ -20,6 +21,57 @@ interface KanbanColumnProps {
   onEdit?: (task: Task) => void;
   onView?: (task: Task) => void;
 }
+
+const getColumnHeaderColor = (status: TaskStatus) => {
+  switch (status) {
+    case TaskStatus.BACKLOG:
+      return "bg-gradient-to-r from-red-50 to-red-100 border-red-200";
+    case TaskStatus.TODO:
+      return "bg-gradient-to-r from-slate-50 to-slate-100 border-slate-200";
+    case TaskStatus.IN_PROGRESS:
+      return "bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200";
+    case TaskStatus.IN_REVIEW:
+      return "bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200";
+    case TaskStatus.DONE:
+      return "bg-gradient-to-r from-green-50 to-green-100 border-green-200";
+    default:
+      return "bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200";
+  }
+};
+
+const getDroppableAreaColor = (status: TaskStatus) => {
+  switch (status) {
+    case TaskStatus.BACKLOG:
+      return "bg-red-25 border-red-100";
+    case TaskStatus.TODO:
+      return "bg-slate-25 border-slate-100";
+    case TaskStatus.IN_PROGRESS:
+      return "bg-blue-25 border-blue-100";
+    case TaskStatus.IN_REVIEW:
+      return "bg-yellow-25 border-yellow-100";
+    case TaskStatus.DONE:
+      return "bg-green-25 border-green-100";
+    default:
+      return "bg-gray-25 border-gray-100";
+  }
+};
+
+const getColumnBorderColor = (status: TaskStatus) => {
+  switch (status) {
+    case TaskStatus.BACKLOG:
+      return "border-t-red-400";
+    case TaskStatus.TODO:
+      return "border-t-slate-500";
+    case TaskStatus.IN_PROGRESS:
+      return "border-t-blue-500";
+    case TaskStatus.IN_REVIEW:
+      return "border-t-yellow-500";
+    case TaskStatus.DONE:
+      return "border-t-green-500";
+    default:
+      return "border-t-gray-400";
+  }
+};
 
 export const KanbanColumn = ({ 
   status, 
@@ -37,12 +89,25 @@ export const KanbanColumn = ({
   return (
     <div className="flex flex-col min-w-[320px] max-w-[320px]">
       {/* Column Header */}
-      <div className="flex items-center justify-between mb-4 p-3 bg-gray-50 rounded-lg border">
-        <div className="flex items-center gap-2">
-          <div className={`w-3 h-3 rounded-full ${statusColorClass}`} />
-          <h3 className="font-semibold text-sm text-gray-900">{title}</h3>
+      <div className={cn(
+        "flex items-center justify-between mb-4 p-4 rounded-lg border-2 border-t-4 shadow-sm",
+        getColumnHeaderColor(status),
+        getColumnBorderColor(status)
+      )}>
+        <div className="flex items-center gap-3">
+          <div className={cn(
+            "w-4 h-4 rounded-full shadow-sm",
+            statusColorClass.replace('border-l-', 'bg-')
+          )} />
+          <h3 className="font-bold text-base text-gray-900">{title}</h3>
         </div>
-        <Badge variant="secondary" className="text-xs">
+        <Badge 
+          variant="outline" 
+          className={cn(
+            "text-xs font-semibold border-0 shadow-sm",
+            TASK_STATUS_BADGE_COLORS[status]
+          )}
+        >
           {tasks.length}
         </Badge>
       </div>
@@ -50,11 +115,12 @@ export const KanbanColumn = ({
       {/* Droppable Area */}
       <div
         ref={setNodeRef}
-        className={`flex-1 min-h-[500px] p-2 rounded-lg transition-colors ${
+        className={cn(
+          "flex-1 min-h-[500px] p-2 rounded-lg transition-colors border",
           isOver 
             ? "bg-blue-50 border-2 border-blue-200 border-dashed" 
-            : "bg-gray-25 border border-gray-100"
-        }`}
+            : getDroppableAreaColor(status)
+        )}
       >
         <SortableContext 
           items={tasks.map(task => task.$id)} 

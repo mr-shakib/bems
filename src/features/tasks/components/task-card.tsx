@@ -18,9 +18,10 @@ import {
   Calendar
 } from "lucide-react";
 import { format } from "date-fns";
-import { Task, TaskStatus } from "../types";
+import { Task, TaskStatus, TASK_STATUS_COLORS, TASK_STATUS_BADGE_COLORS, TASK_STATUS_LABELS } from "../types";
 import { useDeleteTask } from "../api/use-delete-task";
 import { useConfirm } from "@/hooks/use-confirm";
+import { cn } from "@/lib/utils";
 
 interface TaskCardProps {
   task: Task & {
@@ -34,33 +35,37 @@ interface TaskCardProps {
   onView?: (task: Task) => void;
 }
 
-const getStatusColor = (status: TaskStatus) => {
+const getCardBackgroundColor = (status: TaskStatus) => {
   switch (status) {
+    case TaskStatus.BACKLOG:
+      return "bg-gradient-to-br from-red-50 to-red-100/50 hover:from-red-100 hover:to-red-150/50";
     case TaskStatus.TODO:
-      return "bg-gray-100 text-gray-700 border-gray-200";
+      return "bg-gradient-to-br from-slate-50 to-slate-100/50 hover:from-slate-100 hover:to-slate-150/50";
     case TaskStatus.IN_PROGRESS:
-      return "bg-blue-100 text-blue-700 border-blue-200";
+      return "bg-gradient-to-br from-blue-50 to-blue-100/50 hover:from-blue-100 hover:to-blue-150/50";
     case TaskStatus.IN_REVIEW:
-      return "bg-yellow-100 text-yellow-700 border-yellow-200";
+      return "bg-gradient-to-br from-yellow-50 to-yellow-100/50 hover:from-yellow-100 hover:to-yellow-150/50";
     case TaskStatus.DONE:
-      return "bg-green-100 text-green-700 border-green-200";
+      return "bg-gradient-to-br from-green-50 to-green-100/50 hover:from-green-100 hover:to-green-150/50";
     default:
-      return "bg-gray-100 text-gray-700 border-gray-200";
+      return "bg-gradient-to-br from-gray-50 to-gray-100/50 hover:from-gray-100 hover:to-gray-150/50";
   }
 };
 
-const getStatusLabel = (status: TaskStatus) => {
+const getCardBorderColor = (status: TaskStatus) => {
   switch (status) {
+    case TaskStatus.BACKLOG:
+      return "border-red-200 hover:border-red-300";
     case TaskStatus.TODO:
-      return "To Do";
+      return "border-slate-200 hover:border-slate-300";
     case TaskStatus.IN_PROGRESS:
-      return "In Progress";
+      return "border-blue-200 hover:border-blue-300";
     case TaskStatus.IN_REVIEW:
-      return "In Review";
+      return "border-yellow-200 hover:border-yellow-300";
     case TaskStatus.DONE:
-      return "Done";
+      return "border-green-200 hover:border-green-300";
     default:
-      return status;
+      return "border-gray-200 hover:border-gray-300";
   }
 };
 
@@ -92,7 +97,13 @@ export const TaskCard = ({ task, onEdit, onView }: TaskCardProps) => {
     <>
       <ConfirmDialog />
       <Card 
-        className="group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col bg-white border border-gray-200 hover:border-gray-300"
+        className={cn(
+          "group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col border-2",
+          "border-l-4", // Thick left border
+          TASK_STATUS_COLORS[task.status], // Left border color from types
+          getCardBackgroundColor(task.status), // Status-based background gradient
+          getCardBorderColor(task.status) // Status-based border colors
+        )}
         onClick={handleView}
       >
         <CardHeader className="pb-3">
@@ -101,9 +112,12 @@ export const TaskCard = ({ task, onEdit, onView }: TaskCardProps) => {
               <div className="mb-2">
                 <Badge 
                   variant="outline" 
-                  className={`${getStatusColor(task.status)} text-xs font-medium border-0`}
+                  className={cn(
+                    "text-xs font-medium border-0 shadow-sm",
+                    TASK_STATUS_BADGE_COLORS[task.status]
+                  )}
                 >
-                  {getStatusLabel(task.status)}
+                  {TASK_STATUS_LABELS[task.status]}
                 </Badge>
               </div>
               

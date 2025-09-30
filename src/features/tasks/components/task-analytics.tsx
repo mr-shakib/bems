@@ -186,6 +186,7 @@ export const TaskAnalytics = ({ tasks, isLoading }: TaskAnalyticsProps) => {
               {Object.entries(statusDistribution).map(([status, count]) => {
                 const percentage = totalTasks > 0 ? (count / totalTasks) * 100 : 0;
                 const statusColors = {
+                  [TaskStatus.BACKLOG]: { bg: 'bg-red-200', text: 'text-red-700', label: 'Backlog' },
                   [TaskStatus.TODO]: { bg: 'bg-gray-200', text: 'text-gray-700', label: 'To Do' },
                   [TaskStatus.IN_PROGRESS]: { bg: 'bg-blue-200', text: 'text-blue-700', label: 'In Progress' },
                   [TaskStatus.IN_REVIEW]: { bg: 'bg-yellow-200', text: 'text-yellow-700', label: 'In Review' },

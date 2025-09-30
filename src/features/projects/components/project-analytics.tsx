@@ -169,6 +169,7 @@ export const ProjectAnalytics = ({ project, tasks, isLoading }: ProjectAnalytics
               {Object.entries(statusDistribution).map(([status, count]) => {
                 const percentage = totalTasks > 0 ? (count / totalTasks) * 100 : 0;
                 const statusColors = {
+                  [TaskStatus.BACKLOG]: 'bg-red-500',
                   [TaskStatus.TODO]: 'bg-gray-500',
                   [TaskStatus.IN_PROGRESS]: 'bg-blue-500',
                   [TaskStatus.IN_REVIEW]: 'bg-yellow-500',
