@@ -25,6 +25,7 @@ import {
 import { registerSchema } from "../schemas";
 import { useRegister } from "../api/use-register";
 import { Mail, Lock, User } from "lucide-react";
+import { signUpWithGithub, signUpWithGoogle } from "@/lib/oauth";
 
 export const SignUpCard = () => {
     const { mutate, isPending } = useRegister();
@@ -164,6 +165,7 @@ export const SignUpCard = () => {
                             variant="outline"
                             disabled={isPending}
                             className="h-11 sm:h-12 border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 rounded-xl transition-all duration-200 active:scale-[0.99] font-medium text-sm sm:text-[15px]"
+                            onClick={() => signUpWithGoogle()}
                         >
                             <FcGoogle className="h-4 w-4 sm:h-5 sm:w-5"/>
                         </Button>
@@ -172,6 +174,7 @@ export const SignUpCard = () => {
                             variant="outline"
                             disabled={isPending}
                             className="h-11 sm:h-12 border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300 rounded-xl transition-all duration-200 active:scale-[0.99] font-medium text-sm sm:text-[15px]"
+                            onClick={() => signUpWithGithub()}
                         >
                             <FaGithub className="h-4 w-4 sm:h-5 sm:w-5"/>
                         </Button>
