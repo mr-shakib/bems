@@ -8,7 +8,7 @@ const SignInPage = async () => {
     const user = await getCurrent();
 
     if (user) {
-        redirect("/");
+        redirect("/dashboard");
     }
 
     return <SignInCard/>

@@ -13,7 +13,7 @@ const WorkspaceIdJoinPage = async({ params }: WorkspaceIdJoinPageProps) => {
 
     const initialValues = await getWorkspaceInfo({ workspaceId: params.workspaceId });
 
-    if(!initialValues) redirect("/");
+    if(!initialValues) redirect("/dashboard");
 
     return(
         <div>
