@@ -16,14 +16,6 @@ const nextConfig = {
   experimental: {
     // Improve build stability
     serverComponentsExternalPackages: ['node-appwrite'],
-    // Ignore missing route group manifest files during output tracing
-    outputFileTracingExcludes: {
-      '/': [
-        '**/node_modules/**',
-        '**/.git/**',
-        '**/page_client-reference-manifest.js',
-      ],
-    },
   },
 };
 
