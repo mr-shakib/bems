@@ -1,0 +1,4 @@
+# Cache Buster
+# This file forces Vercel to rebuild from scratch
+# Last updated: 2025-10-04 11:47 UTC
+CACHE_VERSION=2
