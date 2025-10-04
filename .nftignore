@@ -1,0 +1,3 @@
+# Ignore non-existent manifest files in route groups
+**/*_client-reference-manifest.js
+**/*_client-reference-manifest.js.nft.json

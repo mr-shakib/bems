@@ -1,4 +1,5 @@
 {
   "framework": "nextjs",
-  "buildCommand": "rm -rf .next && next build"
+  "buildCommand": "rm -rf .next && next build",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./"
 }
