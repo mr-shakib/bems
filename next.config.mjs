@@ -12,6 +12,8 @@ const nextConfig = {
   cleanDistDir: true,
   // External packages for server components
   serverExternalPackages: ['node-appwrite'],
+  // Output standalone for better Vercel compatibility with route groups
+  output: 'standalone',
 };
 
 export default nextConfig;
