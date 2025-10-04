@@ -12,6 +12,11 @@ const nextConfig = {
   swcMinify: true,
   // Ensure clean builds
   cleanDistDir: true,
+  // Experimental features for better stability on Vercel
+  experimental: {
+    // Improve build stability
+    serverComponentsExternalPackages: ['node-appwrite'],
+  },
 };
 
 export default nextConfig;
