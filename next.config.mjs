@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -17,7 +17,7 @@ const nextConfig = {
   serverExternalPackages: ['node-appwrite'],
   
   // Workaround for Next.js 15 route group manifest bug
-  webpack: (config, { isServer, dev }) => {
+  webpack: (config, { isServer, dev, webpack }) => {
     if (isServer && !dev) {
       // Create a custom webpack plugin to generate manifests before finalization
       class CreateClientManifestsPlugin {
@@ -26,7 +26,7 @@ const nextConfig = {
             compilation.hooks.processAssets.tap(
               {
                 name: 'CreateClientManifestsPlugin',
-                stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+                stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
               },
               () => {
                 const manifestPaths = [
@@ -39,7 +39,7 @@ const nextConfig = {
                   const content = 'module.exports = {};';
                   compilation.emitAsset(
                     manifestPath,
-                    new compiler.webpack.sources.RawSource(content)
+                    new webpack.sources.RawSource(content)
                   );
                 });
               }
