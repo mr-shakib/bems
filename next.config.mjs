@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -13,45 +10,9 @@ const nextConfig = {
   },
   // Ensure clean builds
   cleanDistDir: true,
-  // External packages for server components
-  serverExternalPackages: ['node-appwrite'],
-  
-  // Workaround for Next.js 15 route group manifest bug
-  webpack: (config, { isServer, dev, webpack }) => {
-    if (isServer && !dev) {
-      // Create a custom webpack plugin to generate manifests before finalization
-      class CreateClientManifestsPlugin {
-        apply(compiler) {
-          compiler.hooks.thisCompilation.tap('CreateClientManifestsPlugin', (compilation) => {
-            compilation.hooks.processAssets.tap(
-              {
-                name: 'CreateClientManifestsPlugin',
-                stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
-              },
-              () => {
-                const manifestPaths = [
-                  'server/app/(dashboard)/page_client-reference-manifest.js',
-                  'server/app/(auth)/sign-in/page_client-reference-manifest.js',
-                  'server/app/(auth)/sign-up/page_client-reference-manifest.js',
-                ];
-
-                manifestPaths.forEach((manifestPath) => {
-                  const content = 'module.exports = {};';
-                  compilation.emitAsset(
-                    manifestPath,
-                    new webpack.sources.RawSource(content)
-                  );
-                });
-              }
-            );
-          });
-        }
-      }
-
-      config.plugins.push(new CreateClientManifestsPlugin());
-    }
-    
-    return config;
+  // External packages for server components (Next.js 14 uses experimental)
+  experimental: {
+    serverComponentsExternalPackages: ['node-appwrite'],
   },
 };
 
