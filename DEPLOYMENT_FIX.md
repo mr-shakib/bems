@@ -23,10 +23,7 @@ Error: ENOENT: no such file or directory, lstat '/vercel/path0/.next/server/app/
 #### `vercel.json`
 ```json
 {
-  "buildCommand": "next build",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "regions": ["iad1"]
+  "framework": "nextjs"
 }
 ```
 
@@ -44,8 +41,17 @@ Added experimental configuration for better Vercel compatibility:
 ```javascript
 experimental: {
   serverComponentsExternalPackages: ['node-appwrite'],
+  // Ignore missing route group manifest files during output tracing
+  outputFileTracingExcludes: {
+    '/': [
+      '**/node_modules/**',
+      '**/.git/**',
+      '**/page_client-reference-manifest.js',
+    ],
+  },
 }
 ```
+This tells Vercel to ignore the missing `page_client-reference-manifest.js` files in route groups during the file tracing step.
 
 ### 4. Added Clean Script to `package.json`
 ```json
