@@ -1,5 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "rm -rf .next && next build && node scripts/fix-manifests.js",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./"
+  "buildCommand": "next build && node scripts/fix-manifests.js",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./",
+  "outputDirectory": ".next"
 }

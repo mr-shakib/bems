@@ -10,10 +10,11 @@ const nextConfig = {
   },
   // Ensure clean builds
   cleanDistDir: true,
-  // External packages for server components (Next.js 14 uses experimental)
-  experimental: {
-    serverComponentsExternalPackages: ['node-appwrite'],
-  },
+  // External packages for server components
+  serverExternalPackages: ['node-appwrite'],
+  // Optimize production builds
+  swcMinify: true,
+  reactStrictMode: true,
 };
 
 export default nextConfig;
