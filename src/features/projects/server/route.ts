@@ -9,6 +9,7 @@ import { sessionMiddleware } from '@/lib/session-middleware';
 import { Hono } from 'hono';
 import { createProjectSchema, updateProjectSchema } from '../schemas';
 import { Project } from '../types';
+import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/cloudinary';
 const app = new Hono()
     .post(
         "/",
@@ -16,7 +17,6 @@ const app = new Hono()
         zValidator("form", createProjectSchema),
         async (c) => {
             const databases = c.get("databases");
-            const storage = c.get("storage");
             const user = c.get("user");
 
             const { name, image, workspaceId } = c.req.valid("form");
@@ -30,35 +30,37 @@ const app = new Hono()
                 return c.json({ error: 'Unauthorized' }, 401);
             }
 
-            let uploadedImageUrl: string | undefined ;
+            let uploadedImageUrl: string | undefined;
+            let imagePublicId: string | undefined;
 
             if(image instanceof File) {
-                const file = await storage.createFile(
-                    IMAGES_BUCKET_ID,
-                    ID.unique(),
-                    image,
-                );
+                try {
+                    const result = await uploadToCloudinary(image);
+                    uploadedImageUrl = result.secure_url;
+                    imagePublicId = result.public_id;
+                } catch (error) {
+                    console.error('Error uploading image to Cloudinary:', error);
+                    throw new Error('Failed to upload image');
+                }
+            }
 
-                const arrayBuffer = await storage.getFilePreview(
-                    IMAGES_BUCKET_ID,
-                    file.$id,
+            // Prepare creation data - only include imagePublicId if it exists
+            const createData: any = {
+                name,
+                imageUrl: uploadedImageUrl,
+                workspaceId,
+            };
 
-                );
-
-                uploadedImageUrl = `data:image/png;base64,${Buffer.from(arrayBuffer).toString('base64')}`;
-
-
+            // Only add imagePublicId if it exists (for backward compatibility)
+            if (imagePublicId) {
+                createData.imagePublicId = imagePublicId;
             }
 
             const project = await databases.createDocument(
                 DATABASE_ID,
                 PROJECTS_ID,
                 ID.unique(),
-                {
-                    name,
-                    imageUrl: uploadedImageUrl,
-                    workspaceId,
-                },
+                createData,
             );
 
             return c.json({ data: project });
@@ -100,11 +102,10 @@ const app = new Hono()
             zValidator("form", updateProjectSchema),
             async (c) => {
                 const databases = c.get("databases");
-                const storage = c.get("storage");
                 const user = c.get("user");
     
                 const {projectId} = c.req.param();
-                const {name, image} = c.req.valid("form");
+                const {name, image, imagePublicId} = c.req.valid("form");
 
                 const existingProject = await databases.getDocument<Project>(
                     DATABASE_ID,
@@ -124,39 +125,100 @@ const app = new Hono()
                     },401
                 );
                 }
-                let uploadedImageUrl: string | undefined ;
+                let uploadedImageUrl: string | undefined;
+                let newImagePublicId: string | undefined;
     
                 if(image instanceof File) {
-                    const file = await storage.createFile(
-                        IMAGES_BUCKET_ID,
-                        ID.unique(),
-                        image,
-                    );
-    
-                    const arrayBuffer = await storage.getFilePreview(
-                        IMAGES_BUCKET_ID,
-                        file.$id,
-    
-                    );
-    
-                    uploadedImageUrl = `data:image/png;base64,${Buffer.from(arrayBuffer).toString('base64')}`;
-    
-    
-                }else{
+                    // Delete previous image if it exists
+                    if (existingProject.imagePublicId) {
+                        try {
+                            await deleteFromCloudinary(existingProject.imagePublicId);
+                        } catch (error) {
+                            console.error('Error deleting previous image from Cloudinary:', error);
+                        }
+                    }
+
+                    try {
+                        const result = await uploadToCloudinary(image);
+                        uploadedImageUrl = result.secure_url;
+                        newImagePublicId = result.public_id;
+                    } catch (error) {
+                        console.error('Error uploading image to Cloudinary:', error);
+                        throw new Error('Failed to upload image');
+                    }
+                } else {
                     uploadedImageUrl = image;
+                    // Only use imagePublicId if it's a non-empty string
+                    newImagePublicId = imagePublicId && imagePublicId.trim() !== '' ? imagePublicId : undefined;
                 }
     
+                // Prepare update data - only include imagePublicId if it exists
+                const updateData: any = {
+                    name,
+                    imageUrl: uploadedImageUrl,
+                };
+
+                // Only add imagePublicId if it exists and is not empty (for backward compatibility)
+                if (newImagePublicId && newImagePublicId.trim() !== '') {
+                    updateData.imagePublicId = newImagePublicId;
+                }
+
                 const project = await databases.updateDocument(
                     DATABASE_ID,
                     PROJECTS_ID,
                     projectId,
-                    {
-                        name,
-                        imageUrl: uploadedImageUrl,
-                    },
+                    updateData,
                 );
     
                 return c.json({ data: project });
+            }
+        )
+        .delete(
+            "/:projectId",
+            sessionMiddleware,
+            async (c) => {
+                const databases = c.get("databases");
+                const user = c.get("user");
+
+                const { projectId } = c.req.param();
+
+                // Get the project to check permissions and image
+                const project = await databases.getDocument(
+                    DATABASE_ID,
+                    PROJECTS_ID,
+                    projectId
+                ) as Project;
+
+                const member = await getMember({
+                    databases,
+                    workspaceId: project.workspaceId,
+                    userId: user.$id,
+                });
+
+                if (!member) {
+                    return c.json({
+                        error: "Unauthorized"
+                    }, 401);
+                }
+
+                // Delete image from Cloudinary if it exists
+                if (project.imagePublicId) {
+                    try {
+                        await deleteFromCloudinary(project.imagePublicId);
+                    } catch (error) {
+                        console.error("Failed to delete image from Cloudinary:", error);
+                        // Continue with project deletion even if image deletion fails
+                    }
+                }
+
+                // Delete the project document
+                await databases.deleteDocument(
+                    DATABASE_ID,
+                    PROJECTS_ID,
+                    projectId
+                );
+
+                return c.json({ data: { $id: projectId } });
             }
         )
 

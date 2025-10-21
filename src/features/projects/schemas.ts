@@ -17,5 +17,5 @@ export const updateProjectSchema = z.object({
         z.string().transform((value) => value ==="" ? undefined : value),
     ])
     .optional(),
-
+    imagePublicId: z.string().optional(),
 });

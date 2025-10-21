@@ -85,6 +85,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
         const finalValues = {
             name: values.name || initialValues.name,
             image: values.image instanceof File ? values.image : "",
+            imagePublicId: initialValues.imagePublicId || "",
         };
 
         updateWorkspace({

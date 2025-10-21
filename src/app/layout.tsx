@@ -13,6 +13,22 @@ const inter = Inter({subsets: ["latin"]});
 export const metadata: Metadata = {
   title: "BEMS - Business Enterprise Management System",
   description: "Manage your business, projects, and teams in one place. BEMS helps you simplify workspace management, streamline collaboration, and track progress effortlessly.",
+  icons: {
+    icon: [
+      {
+        url: "/assets/images/utl_logo_bems.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/assets/images/utl_logo_bems.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+    ],
+    shortcut: "/assets/images/utl_logo_bems.png",
+    apple: "/assets/images/utl_logo_bems.png",
+  },
 };
 
 export default function RootLayout({

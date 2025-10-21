@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface BemsLogoProps {
@@ -7,26 +8,24 @@ interface BemsLogoProps {
 
 export const BemsLogo = ({ className, size = "md" }: BemsLogoProps) => {
   const sizeClasses = {
-    sm: "text-lg font-bold",
-    md: "text-2xl font-bold", 
-    lg: "text-3xl font-bold",
-    xl: "text-4xl font-bold"
+    sm: { width: 60, height: 24 },
+    md: { width: 90, height: 36 }, 
+    lg: { width: 120, height: 48 },
+    xl: { width: 150, height: 60 }
   };
 
+  const { width, height } = sizeClasses[size];
+
   return (
-    <div className={cn("select-none", className)}>
-      <span 
-        className={cn(
-          "bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent",
-          sizeClasses[size]
-        )}
-        style={{
-          fontFamily: "system-ui, -apple-system, sans-serif",
-          letterSpacing: "0.05em"
-        }}
-      >
-        bems
-      </span>
+    <div className={cn("select-none flex items-center", className)}>
+      <Image
+        src="/assets/images/logo_bems.png"
+        alt="BEMS Logo"
+        width={width}
+        height={height}
+        className="object-contain"
+        priority
+      />
     </div>
   );
 };

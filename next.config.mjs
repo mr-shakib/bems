@@ -9,6 +9,17 @@ const nextConfig = {
   // Optimize production builds
   swcMinify: true,
   reactStrictMode: true,
+  // Configure external image domains
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import Link from "next/link";
 import { Project } from "../types";
 import { ProjectAvatar } from "./project-avatar";
 import { useUpdateProject } from "../api/use-update-project";
+import { useDeleteProject } from "../api/use-delete-project";
 import { useConfirm } from "@/hooks/use-confirm";
 import { toast } from "sonner";
 
@@ -33,15 +34,16 @@ interface ProjectSettingsViewProps {
 
 export const ProjectSettingsView = ({ project, workspaceId }: ProjectSettingsViewProps) => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   
   // Form state
   const [name, setName] = useState(project.name);
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState(project.imageUrl);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   
-  const { mutate: updateProject } = useUpdateProject();
-  
+  const { mutate: updateProject, isPending: isLoading } = useUpdateProject();
+  const { mutate: deleteProject, isPending: isDeletingProject } = useDeleteProject();
   const [ConfirmDialog, confirm] = useConfirm(
     "Delete Project",
     "Are you sure you want to delete this project? This action cannot be undone and will delete all tasks and data associated with this project.",
@@ -54,13 +56,12 @@ export const ProjectSettingsView = ({ project, workspaceId }: ProjectSettingsVie
       return;
     }
 
-    setIsLoading(true);
-    
     updateProject({
       param: { projectId: project.$id },
       form: {
         name: name.trim(),
-        image: imageUrl,
+        image: imageFile || imageUrl,
+        imagePublicId: project.imagePublicId || "",
       }
     }, {
       onSuccess: () => {
@@ -69,7 +70,6 @@ export const ProjectSettingsView = ({ project, workspaceId }: ProjectSettingsVie
       },
       onError: () => {
         toast.error("Failed to update project");
-        setIsLoading(false);
       }
     });
   };
@@ -78,13 +78,26 @@ export const ProjectSettingsView = ({ project, workspaceId }: ProjectSettingsVie
     const ok = await confirm();
     if (!ok) return;
 
-    // TODO: Implement delete project functionality
-    toast.info("Delete functionality will be implemented soon");
+    deleteProject(
+      { param: { projectId: project.$id } },
+      {
+        onSuccess: () => {
+          router.push(`/workspaces/${workspaceId}`);
+        }
+      }
+    );
   };
 
   const handleImageUpload = () => {
-    // TODO: Implement image upload functionality
-    toast.info("Image upload feature coming soon");
+    inputRef.current?.click();
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      setImageUrl(URL.createObjectURL(file));
+    }
   };
 
   return (
@@ -140,16 +153,44 @@ export const ProjectSettingsView = ({ project, workspaceId }: ProjectSettingsVie
                   fallbackClassName="text-xl"
                 />
                 <div className="space-y-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={handleImageUpload}
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload Image
-                  </Button>
+                  <input
+                    className="hidden"
+                    type="file"
+                    accept=".jpg, .jpeg, .png, .svg"
+                    ref={inputRef}
+                    onChange={handleImageChange}
+                    disabled={isLoading}
+                  />
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={handleImageUpload}
+                      disabled={isLoading}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload Image
+                    </Button>
+                    {(imageFile || imageUrl) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setImageFile(null);
+                          setImageUrl("");
+                          if (inputRef.current) {
+                            inputRef.current.value = "";
+                          }
+                        }}
+                        disabled={isLoading}
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Remove
+                      </Button>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground">
-                    Recommended: Square image, at least 400x400px
+                    PNG, JPG, SVG, JPEG (max. 1MB). Recommended: Square image, at least 400x400px
                   </p>
                 </div>
               </div>
@@ -293,10 +334,10 @@ export const ProjectSettingsView = ({ project, workspaceId }: ProjectSettingsVie
                 variant="destructive" 
                 size="sm"
                 onClick={handleDelete}
-                disabled={isLoading}
+                disabled={isLoading || isDeletingProject}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete Project
+                {isDeletingProject ? "Deleting..." : "Delete Project"}
               </Button>
             </div>
           </CardContent>
