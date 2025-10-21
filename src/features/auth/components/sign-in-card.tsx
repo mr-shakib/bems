@@ -13,6 +13,7 @@ import {
     CardTitle 
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     Form, 
     FormControl, 
@@ -23,17 +24,20 @@ import {
 import Link from "next/link";
 import { loginSchema } from "../schemas";
 import { useLogin } from "../api/use-login";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { signUpWithGithub, signUpWithGoogle } from "@/lib/oauth";
+import { useState } from "react";
 
 export const SignInCard = () => {
     const { mutate, isPending } = useLogin();
+    const [showPassword, setShowPassword] = useState(false);
 
     const form = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
             email: "",
             password: "",
+            rememberMe: false,
         }
     });
 
@@ -91,10 +95,21 @@ export const SignInCard = () => {
                                                 <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-[18px] sm:w-[18px] text-neutral-400 transition-colors group-focus-within:text-neutral-700" />
                                                 <Input
                                                     {...field}
-                                                    type="password"
+                                                    type={showPassword ? "text" : "password"}
                                                     placeholder="Password"
-                                                    className="h-11 sm:h-12 pl-10 sm:pl-12 pr-4 bg-neutral-50/50 border-neutral-200 rounded-xl focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-neutral-100 transition-all duration-200 placeholder:text-neutral-400 text-sm sm:text-[15px]"
+                                                    className="h-11 sm:h-12 pl-10 sm:pl-12 pr-12 bg-neutral-50/50 border-neutral-200 rounded-xl focus:bg-white focus:border-neutral-400 focus:ring-2 focus:ring-neutral-100 transition-all duration-200 placeholder:text-neutral-400 text-sm sm:text-[15px]"
                                                 />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 transition-colors duration-200"
+                                                >
+                                                    {showPassword ? (
+                                                        <EyeOff className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+                                                    ) : (
+                                                        <Eye className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+                                                    )}
+                                                </button>
                                             </div>
                                         </FormControl>
                                         <FormMessage/>
@@ -102,11 +117,34 @@ export const SignInCard = () => {
                                 )}
                             />
 
-                            <div className="flex items-center justify-end">
-                                <Link href="/forgot-password" className="text-xs sm:text-sm text-neutral-600 hover:text-neutral-900 transition-colors duration-200 font-medium">
-                                    Forgot password?
-                                </Link>
-                            </div>
+                            <FormField 
+                                name="rememberMe"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-2">
+                                                <Checkbox
+                                                    id="rememberMe"
+                                                    checked={field.value}
+                                                    onCheckedChange={field.onChange}
+                                                    className="border-neutral-300 data-[state=checked]:bg-neutral-900 data-[state=checked]:border-neutral-900"
+                                                />
+                                                <label
+                                                    htmlFor="rememberMe"
+                                                    className="text-xs sm:text-sm text-neutral-600 font-medium cursor-pointer select-none"
+                                                >
+                                                    Remember me
+                                                </label>
+                                            </div>
+                                            <Link href="/forgot-password" className="text-xs sm:text-sm text-neutral-600 hover:text-neutral-900 transition-colors duration-200 font-medium">
+                                                Forgot password?
+                                            </Link>
+                                        </div>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
                             
                             <Button 
                                 disabled={isPending} 

@@ -24,7 +24,7 @@ const app = new Hono()
          zValidator("json", loginSchema), 
     async (c) => {
 
-          const { email, password } = c.req.valid("json");
+          const { email, password, rememberMe } = c.req.valid("json");
           
           const { account } = await createAdminClient();
           const session = await account.createEmailPasswordSession(
@@ -32,12 +32,17 @@ const app = new Hono()
                password
           );
 
+          // Set cookie duration based on rememberMe option
+          const maxAge = rememberMe 
+               ? 60 * 60 * 24 * 30  // 30 days if remember me is checked
+               : 60 * 60 * 24;      // 1 day if not checked
+
           setCookie(c, AUTH_COOKIE, session.secret, {
                httpOnly: true,
                secure: true,
                sameSite: "strict",
                path: "/",
-               maxAge: 60 * 60 * 24 * 30, // 1 month
+               maxAge,
           });
 
           return c.json({ success: true });
