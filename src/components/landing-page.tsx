@@ -442,7 +442,7 @@ export const LandingPage = () => {
               asChild 
               variant="outline" 
               size="lg"
-              className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-200"
+              className="border-white/50 bg-transparent text-white hover:bg-white/20 hover:border-white hover:text-white transition-all duration-200 backdrop-blur-sm"
             >
               <Link href="/sign-in">Login</Link>
             </Button>
@@ -459,15 +459,15 @@ export const LandingPage = () => {
               <p className="text-slate-400">© 2025 BEMS. All rights reserved.</p>
             </div>
             <div className="flex space-x-6">
-              <a href="#" className="text-slate-400 hover:text-white transition-colors">
+              <Link href="/privacy" className="text-slate-400 hover:text-white transition-colors">
                 Privacy
-              </a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors">
+              </Link>
+              <Link href="/terms" className="text-slate-400 hover:text-white transition-colors">
                 Terms
-              </a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors">
+              </Link>
+              <Link href="/support" className="text-slate-400 hover:text-white transition-colors">
                 Support
-              </a>
+              </Link>
             </div>
           </div>
         </div>
