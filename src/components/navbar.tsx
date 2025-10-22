@@ -75,13 +75,19 @@ export const Navbar = () => {
     const { title, description } = getHeaderContent();
 
     return (
-        <nav className="pt-3 sm:pt-4 px-4 sm:px-6 flex items-center justify-between">
-            <div className="flex-col hidden lg:flex">
-                <h1 className="text-xl sm:text-2xl font-semibold">{title}</h1>
-                <p className="text-muted-foreground text-sm sm:text-base">{description}</p>
+        <nav className="pt-3 sm:pt-4 px-4 sm:px-6 flex items-center justify-between transition-all duration-300 ease-out">
+            <div className="flex-col hidden lg:flex animate-fade-in">
+                <h1 className="text-xl sm:text-2xl font-semibold transition-all duration-300 ease-out hover:text-primary">{title}</h1>
+                <p className="text-muted-foreground text-sm sm:text-base transition-all duration-300 ease-out">{description}</p>
             </div>
-            <MobileSidebar />
-            <UserButton />
+            <div className="flex items-center gap-3 animate-slide-in-right">
+                <div className="transition-all duration-300 ease-out hover:scale-105">
+                    <MobileSidebar />
+                </div>
+                <div className="transition-all duration-300 ease-out hover:scale-105">
+                    <UserButton />
+                </div>
+            </div>
         </nav>
     );
 };

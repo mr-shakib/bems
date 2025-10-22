@@ -109,29 +109,38 @@ export const WorkspaceDashboard = ({ workspaceId, workspaceName }: WorkspaceDash
   }
 
   return (
-    <div className="h-full flex flex-col space-y-4 sm:space-y-6">
-      {/* Header Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:ml-auto">
+    <div className="h-full flex flex-col space-y-4 sm:space-y-6 animate-fade-in">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 animate-slide-in-up">
+        <div className="flex-1">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 transition-all duration-300 ease-out hover:text-primary">
+            {workspaceName} Dashboard
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1 transition-all duration-300 ease-out">
+            Monitor all of your projects and tasks in one place
+          </p>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:ml-auto animate-slide-in-right">
           {/* Analytics Toggle */}
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowAnalytics(!showAnalytics)}
-            className="h-9 px-3 text-sm"
+            className="h-9 px-3 text-sm btn-smooth"
           >
-            <BarChart3 className="h-4 w-4 mr-1" />
+            <BarChart3 className="h-4 w-4 mr-1 transition-transform duration-300 group-hover:scale-110" />
             Analytics
             {showAnalytics ? (
-              <ChevronUp className="h-4 w-4 ml-1" />
+              <ChevronUp className="h-4 w-4 ml-1 transition-transform duration-300" />
             ) : (
-              <ChevronDown className="h-4 w-4 ml-1" />
+              <ChevronDown className="h-4 w-4 ml-1 transition-transform duration-300" />
             )}
           </Button>
           
-          <Button asChild className="h-9 px-3 text-sm">
+          <Button asChild className="h-9 px-3 text-sm btn-smooth">
             <Link href={`/workspaces/${workspaceId}/tasks`}>
-              <ClipboardList className="h-4 w-4 mr-2" />
+              <ClipboardList className="h-4 w-4 mr-2 transition-transform duration-300 group-hover:scale-110" />
               <span className="hidden sm:inline">View All Tasks</span>
               <span className="sm:hidden">Tasks</span>
             </Link>
@@ -141,10 +150,10 @@ export const WorkspaceDashboard = ({ workspaceId, workspaceName }: WorkspaceDash
 
       {/* Analytics Section */}
       {showAnalytics && (
-        <Card className="border border-gray-200">
+        <Card className="border border-gray-200 animate-slide-in-down card-smooth">
           <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center gap-2 mb-4 sm:mb-6">
-              <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
+            <div className="flex items-center gap-2 mb-4 sm:mb-6 animate-fade-in">
+              <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 animate-bounce-in" />
               <h2 className="text-base sm:text-lg font-semibold text-gray-900">Workspace Analytics</h2>
             </div>
             <TaskAnalytics 
@@ -157,42 +166,42 @@ export const WorkspaceDashboard = ({ workspaceId, workspaceName }: WorkspaceDash
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <Card>
+        <Card className="card-smooth animate-scale-in" style={{ animationDelay: '0.1s' }}>
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center mb-2">
-              <Target className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+              <Target className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 transition-transform duration-300 hover:scale-110 hover:rotate-12" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold">{totalTasks}</p>
+            <p className="text-xl sm:text-2xl font-bold transition-all duration-300 hover:scale-105">{totalTasks}</p>
             <p className="text-xs sm:text-sm text-muted-foreground">Total Tasks</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="card-smooth animate-scale-in" style={{ animationDelay: '0.2s' }}>
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center mb-2">
-              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+              <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600 transition-transform duration-300 hover:scale-110 hover:rotate-12" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-green-600">{completedTasks}</p>
+            <p className="text-xl sm:text-2xl font-bold text-green-600 transition-all duration-300 hover:scale-105">{completedTasks}</p>
             <p className="text-xs sm:text-sm text-muted-foreground">Completed</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="card-smooth animate-scale-in" style={{ animationDelay: '0.3s' }}>
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center mb-2">
-              <FolderOpen className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+              <FolderOpen className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600 transition-transform duration-300 hover:scale-110 hover:rotate-12" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-purple-600">{allProjects.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-purple-600 transition-all duration-300 hover:scale-105">{allProjects.length}</p>
             <p className="text-xs sm:text-sm text-muted-foreground">Projects</p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="card-smooth animate-scale-in" style={{ animationDelay: '0.4s' }}>
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center mb-2">
-              <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
+              <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600 transition-transform duration-300 hover:scale-110 hover:rotate-12" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-red-600">{overdueTasks.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-red-600 transition-all duration-300 hover:scale-105">{overdueTasks.length}</p>
             <p className="text-xs sm:text-sm text-muted-foreground">Overdue</p>
           </CardContent>
         </Card>

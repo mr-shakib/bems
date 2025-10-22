@@ -26,10 +26,15 @@ export const Projects = () => {
             </div>
             <button
                 onClick={open}
-                className="p-1.5 rounded-md text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                className={cn(
+                    "p-1.5 rounded-lg text-slate-500 transition-all duration-300 ease-out transform",
+                    "hover:text-slate-700 hover:bg-slate-100 hover:scale-110 hover:shadow-sm",
+                    "active:scale-95 active:transition-transform active:duration-75",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-slate-400"
+                )}
                 title="Create new project"
             >
-                <RiAddCircleFill className="size-4" />
+                <RiAddCircleFill className="size-4 transition-transform duration-300 hover:rotate-90" />
             </button>
            </div>
 
@@ -38,29 +43,40 @@ export const Projects = () => {
                     const href = `/workspaces/${workspaceId}/projects/${project.$id}`;
                     const isActive = pathname === href;
                     return (
-                        <Link href={href} key={project.$id}>
+                        <Link href={href} key={project.$id} className="block">
                             <div
                             className = {cn(
-                                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
-                                "hover:shadow-sm border border-transparent group",
+                                "group relative flex items-center gap-3 px-3 py-2.5 rounded-xl",
+                                "transition-colors duration-150 ease-out border border-transparent",
+                                "hover:shadow-md hover:shadow-black/5 hover:scale-[1.01]",
+                                "active:scale-[0.99] active:transition-transform active:duration-75",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
                                 isActive
-                                    ? "bg-blue-50/80 text-blue-900 border-blue-100/60 shadow-sm"
+                                    ? "bg-blue-50/80 text-blue-900 border-blue-100/60 shadow-md scale-[1.01]"
                                     : "text-slate-700 hover:text-slate-900 hover:bg-slate-50/80 hover:border-slate-200/50"
                             )}>
-                                <ProjectAvatar
-                                    image={project.imageUrl}
-                                    name={project.name}
-                                    fallbackClassName={cn(
-                                        "w-8 h-8",
-                                        isActive ? "bg-blue-100/80 text-blue-700" : "bg-slate-100 text-slate-600"
-                                    )}
-                                />
+                                <div className={cn(
+                                    "relative z-10 transition-colors duration-150 ease-out"
+                                )}>
+                                    <ProjectAvatar
+                                        image={project.imageUrl}
+                                        name={project.name}
+                                        fallbackClassName={cn(
+                                            "w-8 h-8 transition-colors duration-150",
+                                            isActive 
+                                                ? "bg-blue-100/80 text-blue-700 shadow-sm" 
+                                                : "bg-slate-100 text-slate-600 group-hover:bg-white"
+                                        )}
+                                    />
+                                </div>
                                 <span className={cn(
-                                    'truncate text-sm transition-colors duration-200',
+                                    'relative z-10 truncate text-sm transition-colors duration-150 ease-out',
                                     isActive 
-                                        ? 'font-semibold text-blue-800 bg-blue-100/40 px-2 py-0.5 rounded-md' 
+                                        ? 'font-semibold text-blue-800 bg-blue-100/40 px-2 py-0.5 rounded-lg shadow-sm drop-shadow-sm' 
                                         : 'font-medium group-hover:text-slate-900'
                                 )}>{project.name}</span>
+                                
+
                             </div>
                         </Link>
                     )

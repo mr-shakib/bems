@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { getCurrent } from "@/features/auth/queries";
 import { getProject } from "@/features/projects/queries";
-import { ProjectSettingsView } from "./project-settings-view";
+import { ProjectSettingsView } from "@/features/projects/components/project-settings-view";
 
 interface ProjectSettingsPageProps{
     params: {

@@ -20,16 +20,18 @@ export const MobileSidebar = () => {
             <SheetTrigger asChild>
                 <Button
                     variant="secondary"
-                    className="lg:hidden hover:bg-white/10 transition-colors duration-200"
+                    className="lg:hidden hover:bg-white/10 transition-all duration-300 ease-out transform hover:scale-105 active:scale-95"
                 >
-                    <MenuIcon className="size-4 text-neutral-500 hover:text-white transition-colors"/>
+                    <MenuIcon className="size-4 text-neutral-500 hover:text-white transition-all duration-300 ease-out transform hover:rotate-180"/>
                 </Button>
             </SheetTrigger>
             <SheetContent
                 side="left"
-                className="p-0 w-80 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 border-r border-slate-700/50"
+                className="p-0 w-80 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 border-r border-slate-700/50 backdrop-blur-md animate-slide-in-left"
             >
-                <Sidebar/>
+                <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                    <Sidebar/>
+                </div>
             </SheetContent>
         </Sheet>
     );
