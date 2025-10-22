@@ -31,6 +31,7 @@ import { Project } from "@/features/projects/types";
 import { TaskAnalytics } from "@/features/tasks/components/task-analytics";
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { format, isToday, isYesterday, subDays } from "date-fns";
+import { SkeletonWorkspaceDashboard } from "@/components/ui/skeleton";
 
 interface WorkspaceDashboardProps {
   workspaceId: string;
@@ -98,14 +99,7 @@ export const WorkspaceDashboard = ({ workspaceId, workspaceName }: WorkspaceDash
     .slice(0, 6);
 
   if (tasksLoading || projectsLoading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <div className="relative w-8 h-8">
-          <div className="w-8 h-8 border-2 border-slate-200 rounded-full"></div>
-          <div className="absolute inset-0 w-8 h-8 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </div>
-    );
+    return <SkeletonWorkspaceDashboard />;
   }
 
   return (

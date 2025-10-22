@@ -69,7 +69,7 @@ export const Navigation = () => {
                             <Link href={fullHref} className="block">
                                 <div className={cn(
                                     "group relative flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium",
-                                    "transition-colors duration-150 ease-out border border-transparent",
+                                    "transition-all duration-150 ease-out border border-transparent",
                                     "hover:shadow-md hover:shadow-black/5 hover:scale-[1.01]",
                                     "active:scale-[0.99] active:transition-transform active:duration-75",
                                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
@@ -79,7 +79,7 @@ export const Navigation = () => {
                                 )}>
                                     <div className={cn(
                                         "relative z-10 flex items-center justify-center w-8 h-8 rounded-lg",
-                                        "transition-colors duration-150 ease-out",
+                                        "transition-all duration-150 ease-out",
                                         isActive
                                             ? `${item.bgColor} ${item.color} shadow-sm`
                                             : "text-slate-500 group-hover:text-slate-700 group-hover:bg-white/60"

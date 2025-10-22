@@ -283,7 +283,7 @@ export const ProfileView = ({ user, workspaceId }: ProfileViewProps) => {
                       disabled={isUploadingImage || isDeletingImage}
                     >
                       {isUploadingImage || isDeletingImage ? (
-                        <Loader2 className="h-3 w-3 animate-spin" />
+                        <span className="h-3 w-3 bg-gradient-to-r from-transparent via-gray-400 to-transparent animate-shimmer rounded" style={{ backgroundSize: '200% 100%' }}></span>
                       ) : (
                         <Edit3 className="h-3 w-3" />
                       )}
@@ -341,7 +341,7 @@ export const ProfileView = ({ user, workspaceId }: ProfileViewProps) => {
                     className="bg-white text-gray-900 hover:bg-gray-100"
                   >
                     {isLoading ? (
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      <span className="h-4 w-4 mr-2 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer rounded" style={{ backgroundSize: '200% 100%' }}></span>
                     ) : (
                       <Save className="h-4 w-4 mr-2" />
                     )}
@@ -394,10 +394,7 @@ export const ProfileView = ({ user, workspaceId }: ProfileViewProps) => {
                         >
                           {isUploadingImage ? (
                             <>
-                              <div className="relative w-4 h-4 mr-2">
-                                <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
-                                <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-                              </div>
+                              <span className="w-4 h-4 mr-2 bg-gradient-to-r from-transparent via-slate-400 to-transparent animate-shimmer rounded" style={{ backgroundSize: '200% 100%' }}></span>
                               {isDeletingImage ? "Replacing..." : "Uploading..."}
                             </>
                           ) : (
@@ -418,10 +415,7 @@ export const ProfileView = ({ user, workspaceId }: ProfileViewProps) => {
                           >
                             {isDeletingImage ? (
                               <>
-                                <div className="relative w-4 h-4 mr-2">
-                                  <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
-                                  <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-                                </div>
+                                <span className="w-4 h-4 mr-2 bg-gradient-to-r from-transparent via-red-400 to-transparent animate-shimmer rounded" style={{ backgroundSize: '200% 100%' }}></span>
                                 Removing...
                               </>
                             ) : (
@@ -439,10 +433,7 @@ export const ProfileView = ({ user, workspaceId }: ProfileViewProps) => {
                       {isDeletingImage && (
                         <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
                           <p className="text-sm text-orange-700 flex items-center">
-                            <div className="relative w-4 h-4 mr-2">
-                              <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
-                              <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-                            </div>
+                            <span className="w-4 h-4 mr-2 bg-gradient-to-r from-transparent via-orange-400 to-transparent animate-shimmer rounded" style={{ backgroundSize: '200% 100%' }}></span>
                             Deleting previous image from cloud storage...
                           </p>
                         </div>

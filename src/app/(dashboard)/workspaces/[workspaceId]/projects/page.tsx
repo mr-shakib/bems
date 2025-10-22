@@ -25,6 +25,7 @@ import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { Task, TaskStatus } from "@/features/tasks/types";
 import { Project } from "@/features/projects/types";
 import { format } from "date-fns";
+import { SkeletonProjectGrid } from "@/components/ui/skeleton";
 
 type ViewMode = "grid" | "list";
 
@@ -64,14 +65,7 @@ export default function ProjectsPage() {
   };
 
   if (projectsLoading || tasksLoading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <div className="relative w-8 h-8">
-          <div className="w-8 h-8 border-2 border-slate-200 rounded-full"></div>
-          <div className="absolute inset-0 w-8 h-8 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </div>
-    );
+    return <SkeletonProjectGrid />;
   }
 
   return (

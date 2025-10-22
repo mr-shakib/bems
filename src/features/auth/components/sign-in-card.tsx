@@ -153,7 +153,7 @@ export const SignInCard = () => {
                             >
                                 {isPending ? (
                                     <span className="flex items-center gap-2">
-                                        <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                        <span className="h-4 w-4 rounded-full bg-gradient-to-r from-white/30 via-white/60 to-white/30 animate-shimmer" style={{ backgroundSize: '200% 100%' }}></span>
                                         Signing in...
                                     </span>
                                 ) : (

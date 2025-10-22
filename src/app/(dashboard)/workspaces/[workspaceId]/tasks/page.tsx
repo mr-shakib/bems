@@ -14,6 +14,7 @@ import { CreateTaskModal } from "@/features/tasks/components/create-task-modal";
 import { EditTaskModal } from "@/features/tasks/components/edit-task-modal";
 import { TaskDetailsModal } from "@/features/tasks/components/task-details-modal";
 import { TaskAnalytics } from "@/features/tasks/components/task-analytics";
+import { SkeletonTaskList, SkeletonKanbanBoard } from "@/components/ui/skeleton";
 
 type ViewMode = "grid" | "kanban";
 
@@ -60,14 +61,7 @@ export default function TasksPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <div className="relative">
-          <div className="w-8 h-8 border-2 border-slate-200 rounded-full"></div>
-          <div className="absolute inset-0 w-8 h-8 border-2 border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </div>
-    );
+    return viewMode === "kanban" ? <SkeletonKanbanBoard /> : <SkeletonTaskList />;
   }
 
   return (

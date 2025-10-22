@@ -114,6 +114,66 @@ body {
     transition: opacity 0.3s ease-in, transform 0.3s ease-in;
   }
 
+  /* Workspace Navigation Transitions */
+  @keyframes workspacePageEnter {
+    0% {
+      opacity: 0;
+      transform: translateY(24px) scale(0.98);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes workspacePageExit {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-24px) scale(0.98);
+    }
+  }
+
+  @keyframes workspaceContentSlide {
+    0% {
+      opacity: 0;
+      transform: translateX(32px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .workspace-page-enter {
+    animation: workspacePageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .workspace-page-exit {
+    animation: workspacePageExit 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  .workspace-content-slide {
+    animation: workspaceContentSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Staggered content animations */
+  .stagger-item {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: workspaceContentSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .stagger-item:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-item:nth-child(2) { animation-delay: 0.15s; }
+  .stagger-item:nth-child(3) { animation-delay: 0.2s; }
+  .stagger-item:nth-child(4) { animation-delay: 0.25s; }
+  .stagger-item:nth-child(5) { animation-delay: 0.3s; }
+  .stagger-item:nth-child(6) { animation-delay: 0.35s; }
+
   /* Smooth hover effects */
   .smooth-hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -274,6 +334,120 @@ body {
       opacity: 0.5;
     }
   }
+
+  /* Dropdown emerging from profile icon */
+@keyframes emergeFromProfile {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: top center;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: top center;
+  }
+}
+
+@keyframes shrinkToProfile {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: top center;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: top center;
+  }
+}
+
+.dropdown-fade {
+  animation: emergeFromProfile 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.dropdown-fade-exit {
+  animation: shrinkToProfile 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+  /* Workspace Switcher Animations */
+  @keyframes workspaceSwitcherOpen {
+    0% {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes workspaceSwitcherClose {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.95);
+    }
+  }
+
+  @keyframes workspaceItemSlide {
+    0% {
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .workspace-switcher-open {
+    animation: workspaceSwitcherOpen 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .workspace-switcher-close {
+    animation: workspaceSwitcherClose 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  .workspace-item-enter {
+    animation: workspaceItemSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Smooth dropdown item animations */
+  .dropdown-item-smooth {
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+  }
+
+  .dropdown-item-smooth:hover {
+    transform: translateX(2px) translateZ(0);
+    background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdown-item-smooth:focus {
+    transform: translateX(2px) translateZ(0);
+    background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdown-item-smooth:active {
+    transform: translateX(1px) scale(0.98) translateZ(0);
+    transition-duration: 0.1s;
+  }
+
+  /* Smooth backdrop blur effect */
+  .backdrop-smooth {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: backdrop-filter 0.2s ease-out;
+  }
+
+
 
   /* Reduced motion preferences */
   @media (prefers-reduced-motion: reduce) {

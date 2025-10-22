@@ -278,10 +278,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
                                 >
                                     {isUpdatingWorkspace ? (
                                         <>
-                                            <div className="relative w-4 h-4 mr-2">
-                                                <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
-                                                <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-                                            </div>
+                                            <span className="w-4 h-4 mr-2 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer rounded" style={{ backgroundSize: '200% 100%' }}></span>
                                             Saving...
                                         </>
                                     ) : (
@@ -345,10 +342,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
                                     >
                                         {isResettingInviteCode ? (
                                             <>
-                                                <div className="relative w-3 h-3 mr-2">
-                                                    <div className="w-3 h-3 border border-slate-200 rounded-full"></div>
-                                                    <div className="absolute inset-0 w-3 h-3 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-                                                </div>
+                                                <span className="w-3 h-3 mr-2 bg-gradient-to-r from-transparent via-orange-400 to-transparent animate-shimmer rounded" style={{ backgroundSize: '200% 100%' }}></span>
                                                 Resetting...
                                             </>
                                         ) : (
@@ -407,10 +401,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }: EditWorkspaceForm
                                 >
                                     {isDeletingWorkspace ? (
                                         <>
-                                            <div className="relative w-4 h-4 mr-2">
-                                                <div className="w-4 h-4 border border-slate-200 rounded-full"></div>
-                                                <div className="absolute inset-0 w-4 h-4 border border-slate-600 border-t-transparent rounded-full animate-spin"></div>
-                                            </div>
+                                            <span className="w-4 h-4 mr-2 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer rounded" style={{ backgroundSize: '200% 100%' }}></span>
                                             Deleting Workspace...
                                         </>
                                     ) : (
